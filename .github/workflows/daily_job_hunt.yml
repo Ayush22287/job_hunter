@@ -1,0 +1,28 @@
+name: Daily Cloud Job Hunter
+
+on:
+  schedule:
+    # Runs at 03:00 UTC every day (8:30 AM IST)
+    - cron: '0 3 * * *'
+  workflow_dispatch: # Lets you click a button to test it manually anytime
+
+jobs:
+  hunt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run Job Hunter
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python job_hunter.py
