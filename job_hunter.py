@@ -234,16 +234,13 @@ def fetch_portal_wide_jobs() -> list:
                 desc = str(row.get("description") or "")
                 site = str(row.get("site") or "Portal").capitalize()
 
-                # Prefer direct career-page URL when available
                 direct_url = row.get("job_url_direct")
                 portal_url = row.get("job_url")
                 link = str(direct_url if direct_url and str(direct_url) != "nan" else portal_url)
 
-                # Filter out senior roles
                 if any(bad in title.lower() for bad in EXCLUDE_TITLE_KEYWORDS):
                     continue
 
-                # Ensure role title matches target domain
                 if not any(role in title.lower() for role in REQUIRED_ROLE_KEYWORDS):
                     continue
 
@@ -298,4 +295,4 @@ if __name__ == "__main__":
     if all_matches:
         send_telegram_alert(all_matches)
     else:
-        print("No new matching
+        print("No new matching jobs in the last 48 hours.")
